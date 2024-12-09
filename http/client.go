@@ -85,9 +85,15 @@ func ClientWithRawAbsPath(rawAbsPath bool) ClientOpt {
 
 // NewClient constructs a new HTTP-backed command executor.
 func NewClient(address string, opts ...ClientOpt) cmds.Executor {
-	if !strings.HasPrefix(address, "http://") {
+	log.Warnf(address)
+
+	if strings.Contains(address, "443") {
+		address = "https://" + address
+	} else if !strings.HasPrefix(address, "http://") {
 		address = "http://" + address
 	}
+
+	log.Warnf(address)
 
 	c := &client{
 		serverAddress: address,
